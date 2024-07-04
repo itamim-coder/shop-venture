@@ -8,11 +8,11 @@ const createProduct = async (product: TProduct): Promise<TProduct | null> => {
     createdProduct = await Product.create(product);
 
     return createdProduct;
-  } catch (log) {
-    throw new Error("Failed to create Book");
+  } catch (err) {
+    throw new Error("Failed to create Product");
   }
 };
 
-export const ProductService = {
+export const ProductServices = {
   createProduct,
 };
