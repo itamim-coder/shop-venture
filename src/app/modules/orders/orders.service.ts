@@ -35,12 +35,11 @@ const createOrder = async (order: TOrders): Promise<TOrders | null> => {
     });
     await createdOrder.save();
 
-    // Return created order
+  
     return createdOrder.toObject() as TOrders;
 
-    // createdOrder = await Order.create(order);
 
-    // return createdOrder;
+ 
   } catch (err) {
     throw new Error("Failed to create Order");
   }
@@ -51,6 +50,9 @@ const getAllOrders = async () => {
   return result;
 };
 const getUserOrders = async (email: unknown): Promise<TOrders[]> => {
+  if (!email) {
+    throw new Error("Order not found");
+  }
   const result = await Order.find({ email });
   return result;
 };
