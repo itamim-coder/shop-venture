@@ -3,6 +3,8 @@ import catchAsync from "../../shared/catchAsync";
 import sendResponse from "../../shared/sendResponse";
 import { TProduct } from "./products.interface";
 import { ProductServices } from "./products.service";
+import { productFilterableFields } from "./products.constants";
+import pick from "../../shared/pick";
 
 const createProduct = catchAsync(async (req: Request, res: Response) => {
   const { ...productData } = req.body;
@@ -10,95 +12,73 @@ const createProduct = catchAsync(async (req: Request, res: Response) => {
   const result = await ProductServices.createProduct(productData);
 
   sendResponse<TProduct>(res, {
-    statusCode: 200,
     success: true,
     message: "Product created successfully!",
     data: result,
   });
 });
 
-// const getAllBooks = catchAsync(async (req: Request, res: Response) => {
-//   // const filters = pick(req.query, BookFilterableFields)
-//   const paginationOptions = pick(req.query, paginationFields);
+const getAllProducts = catchAsync(async (req: Request, res: Response) => {
+  const filters = pick(req.query, productFilterableFields);
+  const result = await ProductServices.getAllProducts(filters);
+  if (!filters) {
+    sendResponse<TProduct[]>(res, {
+      success: true,
+      message: "Products fetched successfully!",
 
-//   const result = await BookService.getAllBooks(paginationOptions);
+      data: result,
+    });
+  } else {
+    sendResponse<TProduct[]>(res, {
+      success: true,
+      message: `Products matching search term '${filters.searchTerm}' fetched successfully!"`,
 
-//   sendResponse<IBook[]>(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Books retrieved successfully !",
-//     meta: result.meta,
-//     data: result.data,
-//   });
-// });
+      data: result,
+    });
+  }
+});
 
-// const getSingleBook = catchAsync(async (req: Request, res: Response) => {
-//   const id = req.params.id;
+const getSingleProduct = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
 
-//   const result = await BookService.getSingleBook(id);
+  const result = await ProductServices.getSingleProduct(id);
 
-//   sendResponse<IBook>(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Book retrieved successfully !",
-//     data: result,
-//   });
-// });
+  sendResponse<TProduct>(res, {
+    success: true,
+    message: "Product fetched successfully!",
+    data: result,
+  });
+});
 
-// const updateBook = catchAsync(async (req: Request, res: Response) => {
-//   const id = req.params.id;
-//   const updatedData = req.body;
+const updateProduct = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const updatedData = req.body;
 
-//   const result = await BookService.updateBook(id, updatedData);
+  const result = await ProductServices.updateProduct(id, updatedData);
 
-//   sendResponse<IBook>(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Book updated successfully !",
-//     data: result,
-//   });
-// });
+  sendResponse<TProduct>(res, {
+    success: true,
+    message: "Product updated successfully !",
+    data: result,
+  });
+});
 
-// const reviewBook = catchAsync(async (req: Request, res: Response) => {
-//   const bookId = req.params.id;
-//   const review = req.body.review;
+const deleteProduct = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
 
-//   const result = await BookService.reviewBook(bookId, review);
-//   console.log(result);
-//   sendResponse<string>(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Book review successfully !",
-//     data: result,
-//   });
-// });
+  await ProductServices.deleteProduct(id);
 
-// const getBookReview = catchAsync(async (req: Request, res: Response) => {
-//   const bookId = req.params.id;
-
-//   const result = await BookService.getBookReview(bookId);
-
-//   sendResponse<any>(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Book Review retrieved successfully !",
-//     data: result,
-//   });
-// });
-
-// const deleteBook = catchAsync(async (req: Request, res: Response) => {
-//   const id = req.params.id;
-
-//   const result = await BookService.deleteBook(id);
-
-//   sendResponse<IBook>(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Book deleted successfully !",
-//     data: result,
-//   });
-// });
+  sendResponse<TProduct>(res, {
+    success: true,
+    message: "Product deleted successfully !",
+    data: null,
+  });
+});
 
 export const ProductControllers = {
   createProduct,
+  getAllProducts,
+  getSingleProduct,
+  updateProduct,
+  deleteProduct,
 };

@@ -8,6 +8,7 @@ import express, { Application } from "express";
 // import globalErrorHandler from "./app/middlewares/globalErrorhandler";
 // import notFound from "./app/middlewares/notFound";
 import router from "./app/routes";
+import notFound from "./app/middlewares/notFound";
 
 const app: Application = express();
 
@@ -29,6 +30,6 @@ app.use("/api", router);
 // app.use(globalErrorHandler);
 
 //Not Found
-// app.use(notFound);
+app.use(notFound);
 
 export default app;

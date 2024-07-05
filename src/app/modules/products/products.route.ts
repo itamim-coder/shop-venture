@@ -6,26 +6,20 @@ import { ProductValidation } from "./products.validation";
 
 const router = express.Router();
 
-// router.get('/:id', BookController.getSingleBook)
+router.get("/:id", ProductControllers.getSingleProduct);
 router.post(
   "",
   validateRequest(ProductValidation.productValidationSchema),
   ProductControllers.createProduct
 );
-// router.post(
-//   '/review/:id',
-//   // validateRequest(BookValidation.createBookZodSchema),
-//   BookController.reviewBook
-// )
 
-// router.get('/review/:id', BookController.getBookReview)
-// router.get('', BookController.getAllBooks)
-// router.delete('/:id', BookController.deleteBook)
+router.get("", ProductControllers.getAllProducts);
+router.delete("/:id", ProductControllers.deleteProduct);
 
-// router.patch(
-//   '/:id',
-//   validateRequest(BookValidation.updateBookZodSchema),
-//   BookController.updateBook
-// )
+router.put(
+  "/:id",
+
+  ProductControllers.updateProduct
+);
 
 export const ProductRoutes = router;
