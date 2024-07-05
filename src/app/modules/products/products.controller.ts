@@ -21,7 +21,7 @@ const createProduct = catchAsync(async (req: Request, res: Response) => {
 const getAllProducts = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, productFilterableFields);
   const result = await ProductServices.getAllProducts(filters);
-  if (!filters) {
+  if (!filters.searchTerm) {
     sendResponse<TProduct[]>(res, {
       success: true,
       message: "Products fetched successfully!",
