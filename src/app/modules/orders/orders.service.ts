@@ -50,7 +50,7 @@ const getAllOrders = async () => {
   const result = await Order.find();
   return result;
 };
-const getUserOrders = async (email: any): Promise<TOrders[]> => {
+const getUserOrders = async (email: unknown): Promise<TOrders[]> => {
   const result = await Order.find({ email });
   return result;
 };
